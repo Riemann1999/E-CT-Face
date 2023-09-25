@@ -125,15 +125,15 @@ def main(args):
     if os.path.exists("./weights_Cls") is False:
         os.makedirs("./weights_Cls")
 
-    # 对训练集作变换
+    
     train_transforms = transforms.Compose([
         transforms.Resize(224),
-        transforms.RandomResizedCrop(224),  # 对图片尺寸做一个缩放切割
-        transforms.RandomHorizontalFlip(),  # 水平翻转
-        transforms.ToTensor(),  # 转化为张量
-        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))  # 进行归一化
+        transforms.RandomResizedCrop(224),  
+        transforms.RandomHorizontalFlip(), 
+        transforms.ToTensor(),  
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))  
     ])
-    # 对测试集做变换
+
     val_transforms = transforms.Compose([
         transforms.Resize(224),
         transforms.RandomResizedCrop(224),
@@ -141,9 +141,7 @@ def main(args):
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
 
-    # 定义数据集
     train_datasets = datasets.ImageFolder(train_dir, transform=train_transforms)
-    # 加载数据集
     train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=batch_size, shuffle=True, num_workers=16,
                                                    pin_memory=True)  # ,num_workers=16,pin_memory=False
     val_datasets = datasets.ImageFolder(val_dir, transform=val_transforms)
@@ -164,10 +162,8 @@ def main(args):
     loss_func = LabelSmoothing()
     loss_func = loss_func.to('cuda')
 
-    # 存储测试loss和acc
     Loss_list = []
     Accuracy_list = []
-    # 存储训练loss和acc
     train_Loss_list = []
     train_Accuracy_list = []
     # loss = []
@@ -190,7 +186,6 @@ def main(args):
         else:
             return
 
-    # 如果有保存的模型，则加载模型，并在其基础上继续训练
     if os.path.exists(log_dir) and args.test_flag:
         checkpoint = torch.load(log_dir)
         model.load_state_dict(checkpoint['model'])
@@ -209,7 +204,7 @@ def main(args):
 
 
     train_acc_B = 0.
-    num_B_Itr = len(train_dataloader)  # 每个Epoch里的Itr
+    num_B_Itr = len(train_dataloader)  
     num_Itr = num_B_Itr * EPOCH  # 总的 Itr
     N_Itr = 0  # 当前的Itr
     # Train--------------------------------
