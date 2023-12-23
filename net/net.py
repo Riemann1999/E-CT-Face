@@ -127,7 +127,6 @@ class Detail_Preservation(nn.Module):
         self.d = dimension
 
     def forward(self, x):
-        # x => B C H W
         return torch.cat([x[..., ::2, ::2], x[..., 1::2, ::2], x[..., ::2, 1::2], x[..., 1::2, 1::2]], self.d)
 
 
